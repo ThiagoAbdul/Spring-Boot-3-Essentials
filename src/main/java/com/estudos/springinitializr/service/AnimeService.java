@@ -1,20 +1,18 @@
 package com.estudos.springinitializr.service;
 
 import com.estudos.springinitializr.domain.Anime;
-import com.estudos.springinitializr.exception.InvalidIdException;
+import com.estudos.springinitializr.exception.BadRequestException;
 import com.estudos.springinitializr.exception.ResourceNotFoundException;
 import com.estudos.springinitializr.mapper.AnimeMapper;
 import com.estudos.springinitializr.repository.AnimeRepository;
+import com.estudos.springinitializr.request.AnimePatchRequestBody;
 import com.estudos.springinitializr.request.AnimePostRequestBody;
 import com.estudos.springinitializr.request.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +34,7 @@ public class AnimeService {
 
 
     private boolean isValidId(Long id){
-        return id >= 0;
+        return id > 0;
     }
 
     public Anime save(AnimePostRequestBody animePostRequestBody){
@@ -44,22 +42,40 @@ public class AnimeService {
         return repository.save(anime);
     }
 
-    public void delete(Long id) throws InvalidIdException {
+    public void delete(Long id) throws BadRequestException {
         if(isValidId(id)){
-            repository.deleteById(id);
+            try{
+                repository.deleteById(id);
+            }
+            catch (Exception e){
+                throw new BadRequestException(e.getMessage());
+            }
         }
         else{
-            throw new InvalidIdException();
+            throw new BadRequestException("Anime not found");
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public Anime replace(Long id, AnimePutRequestBody animePutRequestBody) throws ResourceNotFoundException {
-        if(repository.findById(id).isEmpty()){
-            throw new ResourceNotFoundException(Anime.class);
+    @Transactional
+    public Anime update(Long id, AnimePatchRequestBody animePatchRequestBody) throws BadRequestException {
+        Anime anime = repository.findById(id).orElseThrow(() -> new BadRequestException("Anime not found"));
+        updateAnime(anime, animePatchRequestBody);
+        return anime;
+    }
+
+    private void updateAnime(Anime originalAnime, AnimePatchRequestBody updatedAnime){
+        if(Objects.nonNull(updatedAnime.getName())){
+            originalAnime.setName(updatedAnime.getName());
         }
-        Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
-        anime.setId(id);
-        return repository.save(anime);
+        if(Objects.nonNull(updatedAnime.getAuthor())){
+            originalAnime.setAuthor(updatedAnime.getAuthor());
+        }
+    }
+
+    public Anime replace(Long id, AnimePutRequestBody animePutRequestBody) throws BadRequestException{
+        repository.findById(id).orElseThrow(() -> new BadRequestException("Anime not found"));
+        Anime animeUpdated = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        animeUpdated.setId(id);
+        return repository.save(animeUpdated);
     }
 }

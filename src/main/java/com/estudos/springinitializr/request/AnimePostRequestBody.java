@@ -1,11 +1,14 @@
 package com.estudos.springinitializr.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 
 @Data
 public class AnimePostRequestBody {
+    @NotEmpty(message = "The anime name cannot be empty")
     private String name;
-    private String autor;
+    private String author;
 }

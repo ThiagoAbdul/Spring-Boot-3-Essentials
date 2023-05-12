@@ -1,8 +1,9 @@
 package com.estudos.springinitializr.controller;
 
 import com.estudos.springinitializr.domain.Anime;
-import com.estudos.springinitializr.exception.InvalidIdException;
+import com.estudos.springinitializr.exception.BadRequestException;
 import com.estudos.springinitializr.exception.ResourceNotFoundException;
+import com.estudos.springinitializr.request.AnimePatchRequestBody;
 import com.estudos.springinitializr.request.AnimePostRequestBody;
 import com.estudos.springinitializr.request.AnimePutRequestBody;
 import com.estudos.springinitializr.service.AnimeService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class AnimeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Anime> findById(@PathVariable Long id){
+    public ResponseEntity<Anime> findById(@PathVariable long id){
         try{
             return ResponseEntity.ok(service.findById(id));
         }
@@ -47,32 +49,26 @@ public class AnimeController {
     }
 
     @PostMapping
-    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody anime){
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody anime){
         Anime animeSaved = service.save(anime);
         return new ResponseEntity<>(animeSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-        try{
-            service.delete(id);
-            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-        }
-        catch (InvalidIdException e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime id not found");
-        }
-        catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Void> delete(@PathVariable long id) throws BadRequestException{
+        service.delete(id);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Anime> update(@PathVariable long id, @RequestBody AnimePatchRequestBody anime)
+                                                                            throws BadRequestException{
+        return ResponseEntity.ok(service.update(id, anime));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Anime> replace(@PathVariable Long id, @RequestBody AnimePutRequestBody anime){
-        try{
-            return ResponseEntity.ok(service.replace(id, anime));
-        }
-        catch (ResourceNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
+    public ResponseEntity<Anime> replace(@PathVariable long id, @Valid @RequestBody AnimePutRequestBody anime)
+                                                                                throws BadRequestException{
+        return ResponseEntity.ok(service.replace(id, anime));
     }
 }
