@@ -30,6 +30,10 @@ public class AnimeService {
                 .orElseThrow(() -> new ResourceNotFoundException(Anime.class));
     }
 
+    public List<Anime> findAllByName(String name){
+        return repository.findAllByName(name);
+    }
+
 
     private boolean isValidId(Long id){
         return id >= 0;
