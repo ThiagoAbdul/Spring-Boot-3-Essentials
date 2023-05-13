@@ -1,13 +1,13 @@
-package com.estudos.springinitializr.service;
+package com.estudos.springframework.service;
 
-import com.estudos.springinitializr.domain.Anime;
-import com.estudos.springinitializr.exception.BadRequestException;
-import com.estudos.springinitializr.exception.ResourceNotFoundException;
-import com.estudos.springinitializr.mapper.AnimeMapper;
-import com.estudos.springinitializr.repository.AnimeRepository;
-import com.estudos.springinitializr.request.AnimePatchRequestBody;
-import com.estudos.springinitializr.request.AnimePostRequestBody;
-import com.estudos.springinitializr.request.AnimePutRequestBody;
+import com.estudos.springframework.domain.Anime;
+import com.estudos.springframework.exceptions.BadRequestException;
+import com.estudos.springframework.exceptions.ResourceNotFoundException;
+import com.estudos.springframework.mapper.AnimeMapper;
+import com.estudos.springframework.repository.AnimeRepository;
+import com.estudos.springframework.request.AnimePatchRequestBody;
+import com.estudos.springframework.request.AnimePostRequestBody;
+import com.estudos.springframework.request.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

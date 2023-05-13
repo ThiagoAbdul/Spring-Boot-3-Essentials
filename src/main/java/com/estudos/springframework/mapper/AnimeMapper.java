@@ -1,8 +1,8 @@
-package com.estudos.springinitializr.mapper;
+package com.estudos.springframework.mapper;
 
-import com.estudos.springinitializr.domain.Anime;
-import com.estudos.springinitializr.request.AnimePostRequestBody;
-import com.estudos.springinitializr.request.AnimePutRequestBody;
+import com.estudos.springframework.domain.Anime;
+import com.estudos.springframework.request.AnimePostRequestBody;
+import com.estudos.springframework.request.AnimePutRequestBody;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;

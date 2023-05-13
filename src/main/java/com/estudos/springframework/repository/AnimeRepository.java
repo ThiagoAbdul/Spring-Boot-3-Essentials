@@ -1,6 +1,6 @@
-package com.estudos.springinitializr.repository;
+package com.estudos.springframework.repository;
 
-import com.estudos.springinitializr.domain.Anime;
+import com.estudos.springframework.domain.Anime;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

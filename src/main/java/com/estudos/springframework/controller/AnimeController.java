@@ -1,13 +1,13 @@
-package com.estudos.springinitializr.controller;
+package com.estudos.springframework.controller;
 
-import com.estudos.springinitializr.domain.Anime;
-import com.estudos.springinitializr.exception.BadRequestException;
-import com.estudos.springinitializr.exception.ResourceNotFoundException;
-import com.estudos.springinitializr.request.AnimePatchRequestBody;
-import com.estudos.springinitializr.request.AnimePostRequestBody;
-import com.estudos.springinitializr.request.AnimePutRequestBody;
-import com.estudos.springinitializr.service.AnimeService;
-import com.estudos.springinitializr.util.DateUtil;
+import com.estudos.springframework.domain.Anime;
+import com.estudos.springframework.exceptions.BadRequestException;
+import com.estudos.springframework.exceptions.ResourceNotFoundException;
+import com.estudos.springframework.request.AnimePatchRequestBody;
+import com.estudos.springframework.request.AnimePostRequestBody;
+import com.estudos.springframework.request.AnimePutRequestBody;
+import com.estudos.springframework.service.AnimeService;
+import com.estudos.springframework.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.estudos.springinitializr.util;
+package com.estudos.springframework.util;
 
 import org.springframework.stereotype.Component;
 

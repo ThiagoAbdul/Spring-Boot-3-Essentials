@@ -1,4 +1,4 @@
-package com.estudos.springinitializr.request;
+package com.estudos.springframework.request;
 
 import lombok.Data;
 

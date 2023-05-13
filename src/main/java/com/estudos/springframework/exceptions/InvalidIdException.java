@@ -1,4 +1,4 @@
-package com.estudos.springinitializr.exception;
+package com.estudos.springframework.exceptions;
 
 public class InvalidIdException extends Exception{
 
