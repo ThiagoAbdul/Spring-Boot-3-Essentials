@@ -10,6 +10,8 @@ import com.estudos.springframework.service.AnimeService;
 import com.estudos.springframework.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,11 @@ public class AnimeController {
     private final DateUtil dateUtil;
     private final AnimeService service;
     @CrossOrigin(origins = {"https://127.0.0.1:4200"})
+
     @GetMapping({"/", ""})
-    public ResponseEntity<List<Anime>> list(){
+    public ResponseEntity<Page<Anime>> listAll(Pageable page){
         log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
-        return ResponseEntity.ok(service.listAll());
+        return ResponseEntity.ok(service.listAll(page));
     }
 
     @GetMapping("/{id}")

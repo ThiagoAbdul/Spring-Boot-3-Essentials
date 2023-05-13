@@ -2,7 +2,6 @@ package com.estudos.springframework.exceptions;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 

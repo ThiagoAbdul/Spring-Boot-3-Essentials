@@ -9,6 +9,10 @@ import com.estudos.springframework.request.AnimePatchRequestBody;
 import com.estudos.springframework.request.AnimePostRequestBody;
 import com.estudos.springframework.request.AnimePutRequestBody;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,5 +81,11 @@ public class AnimeService {
         Anime animeUpdated = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
         animeUpdated.setId(id);
         return repository.save(animeUpdated);
+    }
+
+    public Page<Anime> listAll(Pageable page) {
+        // Sort sort = Sort.by("name").descending();
+        // Pageable pageable = PageRequest.of(0, 5, sort);
+        return repository.findAll(page);
     }
 }
