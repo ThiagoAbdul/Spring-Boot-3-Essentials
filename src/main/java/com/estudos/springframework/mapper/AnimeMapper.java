@@ -17,5 +17,7 @@ public interface AnimeMapper {
     Anime toAnime(AnimePostRequestBody anime);
     Anime toAnime(AnimePutRequestBody anime);
     AnimeView toAnimeView(Anime anime);
+    AnimePostRequestBody toAnimePostRequestBody(Anime anime);
+    AnimePutRequestBody toAnimePutRequestBody(Anime anime);
 
 }
