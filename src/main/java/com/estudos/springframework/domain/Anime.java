@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @NoArgsConstructor
@@ -18,6 +19,7 @@ public class Anime implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, length = 50)
+    @NotBlank(message = "The anime name cannot be blank")
     private String name;
 
     @Column(length = 50)
