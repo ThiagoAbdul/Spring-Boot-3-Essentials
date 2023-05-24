@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -27,13 +26,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log4j2
 public class AnimeController {
+
     private final DateUtil dateUtil;
     private final AnimeService service;
     @CrossOrigin(origins = {"https://127.0.0.1:4200"})
 
     @GetMapping({"/", ""})
-    public ResponseEntity<Page<AnimeView>> list(Pageable page){
-        log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
+    public ResponseEntity<Page<AnimeView>> listAllPageable(Pageable page){
+        //log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
         return ResponseEntity.ok(service.listAll(page));
     }
 

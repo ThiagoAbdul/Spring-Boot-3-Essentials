@@ -2,6 +2,7 @@ package com.estudos.springframework.repository;
 
 import com.estudos.springframework.domain.Anime;
 
+import com.estudos.springframework.util.AnimeCreator;
 import org.assertj.core.api.Assertions;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,13 +26,13 @@ class AnimeRepositoryTest {
     private Anime animeSaved;
     @BeforeEach
     void setup(){
-        animeSaved = animeRepository.save(createAnime());
+        animeSaved = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
     }
 
     @Test
     @DisplayName("Save a anime when successful")
     void saveTest(){
-        var animeToBeSaved = createAnime();
+        var animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
         var animeSavedNow = animeRepository.save(animeToBeSaved);
         Assertions.assertThat(animeSavedNow).isNotNull();
         Assertions.assertThat(animeSavedNow.getId()).isNotNull();
@@ -81,12 +82,7 @@ class AnimeRepositoryTest {
         Assertions.assertThat(animeList).isEmpty();
     }
 
-    private Anime createAnime(){
-        return Anime.builder()
-                .name("Bleach")
-                .author("Tite kubo")
-                .build();
-    }
+
 
     @Test
     @DisplayName("Test if allows to save anime with empty name")
