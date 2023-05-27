@@ -26,8 +26,11 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(
                 authManager -> authManager
+                        .requestMatchers(request -> request.getServletPath().contains("public")).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
+                .formLogin()
+                .and()
                 .cors()
                 .and()
                 .csrf()

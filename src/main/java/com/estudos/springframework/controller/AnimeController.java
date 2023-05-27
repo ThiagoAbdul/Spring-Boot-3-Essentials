@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +39,11 @@ public class AnimeController {
     public ResponseEntity<Page<AnimeView>> listAllPageable(Pageable page){
         //log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
         return ResponseEntity.ok(service.listAll(page));
+    }
+
+    @GetMapping("/public")
+    public ResponseEntity<String> user(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok("Animes API");
     }
 
     @GetMapping("/all")
@@ -68,8 +75,9 @@ public class AnimeController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable long id) throws BadRequestException{
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) throws BadRequestException{
         service.delete(id);
+        log.info("User {} deleted anime with id {}", userDetails.getUsername(), id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
