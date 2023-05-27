@@ -15,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -58,12 +60,14 @@ public class AnimeController {
     }
 
     @PostMapping
+    @CrossOrigin(origins = "http://127.0.0.1:5500")
     public ResponseEntity<AnimeView> save(@RequestBody @Valid AnimePostRequestBody anime){
         AnimeView animeSaved = service.save(anime);
         return new ResponseEntity<>(animeSaved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable long id) throws BadRequestException{
         service.delete(id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
