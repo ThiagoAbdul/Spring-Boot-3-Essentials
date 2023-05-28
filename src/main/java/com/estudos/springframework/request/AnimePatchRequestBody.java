@@ -1,11 +1,11 @@
 package com.estudos.springframework.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 @Data
 public class AnimePatchRequestBody {
+    @Schema(description = "Name of anime can be omitted in this case")
     private String name;
     private String author;
 }

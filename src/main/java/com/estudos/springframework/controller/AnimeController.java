@@ -9,8 +9,13 @@ import com.estudos.springframework.request.AnimePutRequestBody;
 import com.estudos.springframework.request.AnimeView;
 import com.estudos.springframework.service.AnimeService;
 import com.estudos.springframework.util.DateUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,13 +40,14 @@ public class AnimeController {
 
     @GetMapping({"/", ""})
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<Page<AnimeView>> listPageable(Pageable page){
+    @Operation(summary = "List all animes paginated", description = "Default size is 10")
+    public ResponseEntity<Page<AnimeView>> listPageable(@ParameterObject Pageable page){
         //log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
         return ResponseEntity.ok(service.listAll(page));
     }
 
     @GetMapping("/public")
-    public ResponseEntity<String> user(@AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<String> home(@AuthenticationPrincipal UserDetails userDetails){
         return ResponseEntity.ok("Animes API");
     }
 
@@ -74,6 +80,11 @@ public class AnimeController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "If try to delete as USER authority"),
+            @ApiResponse(responseCode = "400", description = "If anime id don't exists")
+    })
     public ResponseEntity<Void> delete(@AuthenticationPrincipal UserDetails userDetails, @PathVariable long id) throws BadRequestException{
         service.delete(id);
         log.info("User {} deleted anime with id {}", userDetails.getUsername(), id);
