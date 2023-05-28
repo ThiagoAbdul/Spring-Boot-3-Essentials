@@ -47,9 +47,9 @@ class AnimeControllerTest {
 
     @Test
     @DisplayName("Tests if the method listAllPageable passing an pageable as argument return a Page of AnimeView")
-    void listAllInsideAsPageTest(){
+    void listPageableTest(){
         Page<AnimeView> expectedAnimeViews = new PageImpl<>(AnimeViewCreator.createListOfAnimeView());
-        Page<AnimeView> resultAnimeViews = animeController.listAllPageable(null).getBody();
+        Page<AnimeView> resultAnimeViews = animeController.listPageable(null).getBody();
         assert resultAnimeViews != null;
         List<String> expectedAnimeNames = expectedAnimeViews.get().map(AnimeView::getName)
                 .collect(Collectors.toList());

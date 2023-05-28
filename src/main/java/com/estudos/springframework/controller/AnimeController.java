@@ -35,7 +35,7 @@ public class AnimeController {
 
     @GetMapping({"/", ""})
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<Page<AnimeView>> listAllPageable(Pageable page){
+    public ResponseEntity<Page<AnimeView>> listPageable(Pageable page){
         //log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
         return ResponseEntity.ok(service.listAll(page));
     }
