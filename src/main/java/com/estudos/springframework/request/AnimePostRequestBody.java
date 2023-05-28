@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 public class AnimePostRequestBody {
-    @NotBlank(message = "The anime name cannot be empty")
+    @NotBlank(message = "The anime's name cannot be empty")
     @Schema(example = "Dragon Ball Z")
     private String name;
     private String author;

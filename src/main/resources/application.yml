@@ -3,6 +3,8 @@ server:
     include-stacktrace: on_param
 
 spring:
+  application:
+    name: spring-essentials
   datasource:
     url: jdbc:mysql://localhost:3306/dbanime?createDatabaseIfNotExist=true
     username: root
