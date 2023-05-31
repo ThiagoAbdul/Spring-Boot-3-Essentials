@@ -14,7 +14,7 @@
 
 - #### Pagination
 
-### Consuming the Api:
+### Example:
 
 ```
 anime = {"name": "Bleach", "author": "Tite Kubo"}
