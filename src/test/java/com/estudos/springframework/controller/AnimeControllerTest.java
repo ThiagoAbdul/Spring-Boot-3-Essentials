@@ -13,11 +13,12 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,12 +49,15 @@ class AnimeControllerTest {
     @Test
     @DisplayName("Tests if the method listAllPageable passing an pageable as argument return a Page of AnimeView")
     void listPageableTest(){
-        Page<AnimeView> expectedAnimeViews = new PageImpl<>(AnimeViewCreator.createListOfAnimeView());
-        Page<AnimeView> resultAnimeViews = animeController.listPageable(null).getBody();
+        CollectionModel<AnimeView> expectedAnimeViews = CollectionModel.of(
+                AnimeViewCreator.createPageOfAnimeView());
+        CollectionModel<AnimeView> resultAnimeViews = animeController.listPageable(null).getBody();
         assert resultAnimeViews != null;
-        List<String> expectedAnimeNames = expectedAnimeViews.get().map(AnimeView::getName)
+        List<String> expectedAnimeNames = expectedAnimeViews.getContent()
+                .stream().map(AnimeView::getName)
                 .collect(Collectors.toList());
-        List<String> resultdAnimeNames = resultAnimeViews.get().map(AnimeView::getName)
+        List<String> resultdAnimeNames = resultAnimeViews.getContent()
+                .stream().map(AnimeView::getName)
                 .collect(Collectors.toList());
 
                 Assertions.assertThat(resultdAnimeNames).isEqualTo(expectedAnimeNames);
@@ -63,12 +67,14 @@ class AnimeControllerTest {
     @Test
     @DisplayName("Test if the method listAll return a list of AnimeView")
     void listAllNonPageableTest(){
-        List<AnimeView> expectedListOfAnime = AnimeViewCreator.createListOfAnimeView();
-        List<AnimeView> resultListOfAnime = animeController.listAll().getBody();
-        Assertions.assertThat(resultListOfAnime)
+        CollectionModel<AnimeView> expectedListOfAnime = CollectionModel.of(
+                AnimeViewCreator.createListOfAnimeView());
+        CollectionModel<AnimeView> resultListOfAnime = animeController.listAll().getBody();
+        assert resultListOfAnime != null;
+        Assertions.assertThat(new ArrayList<>(resultListOfAnime.getContent()))
                 .isNotNull()
                 .isNotEmpty()
-                .isEqualTo(expectedListOfAnime);
+                .isEqualTo(new ArrayList<>(expectedListOfAnime.getContent()));
     }
 
     @Test

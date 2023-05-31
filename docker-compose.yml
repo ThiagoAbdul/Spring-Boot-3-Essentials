@@ -1,8 +1,8 @@
 version: '2.4'
-x-databases-variables: &database-variables
-  SPRING_DATASOURCE_URL: jdbc:mysql://mysql_container_2:3306/dbanime?createDatabaseIfNotExist=true
-  SPRING_DATASOURCE_USERNAME: root
-  SPRING_DATASOURCE_PASSWORD: root
+#x-databases-variables: &database-variables
+#  SPRING_DATASOURCE_URL: jdbc:mysql://mysql_container_2:3306/dbanime?createDatabaseIfNotExist=true
+#  SPRING_DATASOURCE_USERNAME: root
+#  SPRING_DATASOURCE_PASSWORD: root
 
 services:
   db:
@@ -31,13 +31,13 @@ services:
     ports:
       - "3000:3000"
     mem_limit: 128m
-  spring-essentials:
-    image: registry.hub.docker.com/thiagoabdul/spring-essentials:0.0.1-SNAPSHOT
-    container_name: spring-essentials
-    ports:
-      - "8080:8080"
-    environment:
-      <<: *database-variables
-    mem_limit: 1024m
+#  spring-essentials:
+#    image: registry.hub.docker.com/thiagoabdul/spring-essentials:0.0.1-SNAPSHOT
+#    container_name: spring-essentials
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      <<: *database-variables
+#    mem_limit: 1024m
 volumes:
   outro_volume:

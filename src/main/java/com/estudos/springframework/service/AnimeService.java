@@ -71,10 +71,10 @@ public class AnimeService {
     }
 
     @Transactional
-    public Anime update(Long id, AnimePatchRequestBody animePatchRequestBody) throws BadRequestException {
+    public AnimeView update(Long id, AnimePatchRequestBody animePatchRequestBody) throws BadRequestException {
         Anime anime = repository.findById(id).orElseThrow(() -> new BadRequestException("Anime not found"));
         updateAnime(anime, animePatchRequestBody);
-        return anime;
+        return animeMapper.toAnimeView(anime);
     }
 
     private void updateAnime(Anime originalAnime, AnimePatchRequestBody updatedAnime){

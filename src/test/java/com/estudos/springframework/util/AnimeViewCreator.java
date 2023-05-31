@@ -1,6 +1,9 @@
 package com.estudos.springframework.util;
 
 import com.estudos.springframework.request.AnimeView;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.hateoas.CollectionModel;
 
 import java.util.List;
 
@@ -17,4 +20,8 @@ public class AnimeViewCreator {
                 new AnimeView(7L, "Naruto", "Masashi Kishimoto")
         );
     }
+    public static Page<AnimeView> createPageOfAnimeView(){
+        return new PageImpl<>(createListOfAnimeView());
+    }
+
 }

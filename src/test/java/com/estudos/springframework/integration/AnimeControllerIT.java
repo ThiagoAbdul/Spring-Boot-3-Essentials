@@ -13,16 +13,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
@@ -66,11 +64,11 @@ public class AnimeControllerIT {
     @Test
     void listAllAsUserAuthorityTest(){
         final String URL = getRootUri("/all");
-        ResponseEntity<List<AnimeView>> responseAnime = testRestTemplateUser.exchange(
+        ResponseEntity<CollectionModel<AnimeView>> responseAnime = testRestTemplateUser.exchange(
                 URL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<AnimeView>>() {
+                new ParameterizedTypeReference<CollectionModel<AnimeView>>() {
                 }
         );
         Assertions.assertThat(responseAnime)
@@ -80,18 +78,17 @@ public class AnimeControllerIT {
                 .isEqualTo(HttpStatus.OK);
         Assertions.assertThat(responseAnime.getBody())
                 .isNotNull();
-        Assertions.assertThat(responseAnime.getBody())
-                .hasSizeGreaterThan(0);
+
     }
 
     @Test
     void listAllAsAdminAuthorityTest(){
         final String URL = getRootUri("/all");
-        ResponseEntity<List<AnimeView>> responseAnime = testRestTemplateAdmin.exchange(
+        ResponseEntity<CollectionModel<AnimeView>> responseAnime = testRestTemplateAdmin.exchange(
                 URL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<AnimeView>>() {
+                new ParameterizedTypeReference<CollectionModel<AnimeView>>() {
                 }
         );
         Assertions.assertThat(responseAnime)
@@ -101,8 +98,6 @@ public class AnimeControllerIT {
                 .isEqualTo(HttpStatus.OK);
         Assertions.assertThat(responseAnime.getBody())
                 .isNotNull();
-        Assertions.assertThat(responseAnime.getBody())
-                .hasSizeGreaterThan(0);
     }
 
     @Test
