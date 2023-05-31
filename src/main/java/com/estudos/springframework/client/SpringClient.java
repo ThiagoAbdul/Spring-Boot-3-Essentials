@@ -2,15 +2,14 @@ package com.estudos.springframework.client;
 
 import com.estudos.springframework.domain.Anime;
 import com.estudos.springframework.mapper.AnimeMapper;
-import com.estudos.springframework.request.AnimePostRequestBody;
 import com.estudos.springframework.request.AnimeView;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @Log4j2
@@ -26,10 +25,10 @@ public class SpringClient {
         AnimeView[] animes = restTemplate.getForObject(url, AnimeView[].class);
         log.info(Arrays.toString(animes));
 
-        ResponseEntity<List<AnimeView>> animeList = restTemplate.exchange(url, HttpMethod.GET, null,
+        ResponseEntity<CollectionModel<AnimeView>> animeCollection = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {
                 });
-        log.info(animeList);
+        log.info(animeCollection);
 
         url = "http://localhost:8080/animes/";
         var animePost = AnimeMapper.INSTANCE.toAnimePostRequestBody(
