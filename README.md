@@ -4,6 +4,8 @@
 
 - #### Authentication
 
+- #### JWT 
+
 - #### Docker
 
 - #### Prometheus
