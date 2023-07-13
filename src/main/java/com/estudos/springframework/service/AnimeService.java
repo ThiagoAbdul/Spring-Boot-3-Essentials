@@ -5,10 +5,10 @@ import com.estudos.springframework.exceptions.BadRequestException;
 import com.estudos.springframework.exceptions.ResourceNotFoundException;
 import com.estudos.springframework.mapper.AnimeMapper;
 import com.estudos.springframework.repository.AnimeRepository;
-import com.estudos.springframework.request.AnimePatchRequestBody;
-import com.estudos.springframework.request.AnimePostRequestBody;
-import com.estudos.springframework.request.AnimePutRequestBody;
-import com.estudos.springframework.request.AnimeView;
+import com.estudos.springframework.dto.AnimePatchRequestBody;
+import com.estudos.springframework.dto.AnimePostRequestBody;
+import com.estudos.springframework.dto.AnimePutRequestBody;
+import com.estudos.springframework.dto.AnimeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,20 +26,20 @@ public class AnimeService {
     private final AnimeRepository repository;
     private final AnimeMapper animeMapper = AnimeMapper.INSTANCE;
     @Transactional(readOnly = true)
-    public List<AnimeView> listAll(){
+    public List<AnimeResponse> listAll(){
         return repository.findAll()
                 .stream().map(animeMapper::toAnimeView)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public AnimeView findById(Long id) throws ResourceNotFoundException {
+    public AnimeResponse findById(Long id) throws ResourceNotFoundException {
         return repository.findById(id)
                 .map(animeMapper::toAnimeView)
                 .orElseThrow(() -> new ResourceNotFoundException(Anime.class));
     }
 
-    public List<AnimeView> findAllByName(String name){
+    public List<AnimeResponse> findAllByName(String name){
         return repository.findAllByName(name)
                 .stream().map(animeMapper::toAnimeView)
                 .collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class AnimeService {
         return id > 0;
     }
 
-    public AnimeView save(AnimePostRequestBody animePostRequestBody){
+    public AnimeResponse save(AnimePostRequestBody animePostRequestBody){
         Anime anime = animeMapper.toAnime(animePostRequestBody);
         repository.save(anime);
         return animeMapper.toAnimeView(anime);
@@ -71,7 +71,7 @@ public class AnimeService {
     }
 
     @Transactional
-    public AnimeView update(Long id, AnimePatchRequestBody animePatchRequestBody) throws BadRequestException {
+    public AnimeResponse update(Long id, AnimePatchRequestBody animePatchRequestBody) throws BadRequestException {
         Anime anime = repository.findById(id).orElseThrow(() -> new BadRequestException("Anime not found"));
         updateAnime(anime, animePatchRequestBody);
         return animeMapper.toAnimeView(anime);
@@ -86,7 +86,7 @@ public class AnimeService {
         }
     }
 
-    public AnimeView replace(Long id, AnimePutRequestBody animePutRequestBody) throws BadRequestException{
+    public AnimeResponse replace(Long id, AnimePutRequestBody animePutRequestBody) throws BadRequestException{
         repository.findById(id).orElseThrow(() -> new BadRequestException("Anime not found"));
         Anime animeUpdated = animeMapper.toAnime(animePutRequestBody);
         animeUpdated.setId(id);
@@ -94,7 +94,7 @@ public class AnimeService {
         return animeMapper.toAnimeView(animeUpdated);
     }
 
-    public Page<AnimeView> listAll(Pageable page) {
+    public Page<AnimeResponse> listAll(Pageable page) {
         // Sort sort = Sort.by("name").descending();
         // Pageable pageable = PageRequest.of(0, 5, sort);
         return repository.findAll(page).map(animeMapper::toAnimeView);

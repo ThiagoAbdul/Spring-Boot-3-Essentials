@@ -1,4 +1,4 @@
-package com.estudos.springframework.request;
+package com.estudos.springframework.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import org.springframework.hateoas.RepresentationModel;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimeView extends RepresentationModel<AnimeView> {
+public class AnimeResponse extends RepresentationModel<AnimeResponse> {
     private long id;
     private String name;
     private String author;

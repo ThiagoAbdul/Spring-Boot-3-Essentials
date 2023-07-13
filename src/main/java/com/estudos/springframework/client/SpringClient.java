@@ -2,7 +2,7 @@ package com.estudos.springframework.client;
 
 import com.estudos.springframework.domain.Anime;
 import com.estudos.springframework.mapper.AnimeMapper;
-import com.estudos.springframework.request.AnimeView;
+import com.estudos.springframework.dto.AnimeResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.hateoas.CollectionModel;
@@ -18,14 +18,14 @@ public class SpringClient {
     public static void main(String[] args) {
         String url = "http://localhost:8080/animes/{id}";
         var restTemplate = new RestTemplate();
-        ResponseEntity<AnimeView> animeResponseEntity = restTemplate.getForEntity(url, AnimeView.class, 1);
+        ResponseEntity<AnimeResponse> animeResponseEntity = restTemplate.getForEntity(url, AnimeResponse.class, 1);
         log.info(animeResponseEntity);
 
         url = "http://localhost:8080/animes/all";
-        AnimeView[] animes = restTemplate.getForObject(url, AnimeView[].class);
+        AnimeResponse[] animes = restTemplate.getForObject(url, AnimeResponse[].class);
         log.info(Arrays.toString(animes));
 
-        ResponseEntity<CollectionModel<AnimeView>> animeCollection = restTemplate.exchange(url, HttpMethod.GET, null,
+        ResponseEntity<CollectionModel<AnimeResponse>> animeCollection = restTemplate.exchange(url, HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {
                 });
         log.info(animeCollection);
@@ -37,14 +37,14 @@ public class SpringClient {
                 .author("Akita Toriyama")
                 .build()
         );
-        AnimeView animeView = restTemplate.postForObject(url, animePost, AnimeView.class);
-        log.info(animeView);
+        AnimeResponse animeResponse = restTemplate.postForObject(url, animePost, AnimeResponse.class);
+        log.info(animeResponse);
 
 
         url = "http://localhost:8080/animes/{id}";
-        if(Objects.nonNull(animeView)){
+        if(Objects.nonNull(animeResponse)){
             HttpStatus statusCode = restTemplate.exchange
-                            (url, HttpMethod.DELETE, null, Void.class, animeView.getId())
+                            (url, HttpMethod.DELETE, null, Void.class, animeResponse.getId())
                     .getStatusCode();
             log.info(statusCode);
         }
@@ -55,10 +55,10 @@ public class SpringClient {
                         .author("Satoshi Tajiri")
                         .build()
         );
-        animeView = restTemplate.exchange(
-                url, HttpMethod.PUT, new HttpEntity<>(animePut, createJsonHeader()), AnimeView.class, 17L)
+        animeResponse = restTemplate.exchange(
+                url, HttpMethod.PUT, new HttpEntity<>(animePut, createJsonHeader()), AnimeResponse.class, 17L)
                 .getBody();
-        log.info(animeView);
+        log.info(animeResponse);
 
     }
 

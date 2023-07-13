@@ -1,11 +1,8 @@
 package com.estudos.springframework.util;
 
 import com.estudos.springframework.domain.Anime;
-import com.estudos.springframework.request.AnimePostRequestBody;
-import com.estudos.springframework.request.AnimeView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AnimeCreator {

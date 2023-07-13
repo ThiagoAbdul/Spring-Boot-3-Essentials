@@ -1,13 +1,12 @@
 package com.estudos.springframework.controller;
 
+import com.estudos.springframework.dto.AnimePatchRequestBody;
+import com.estudos.springframework.dto.AnimePostRequestBody;
+import com.estudos.springframework.dto.AnimePutRequestBody;
+import com.estudos.springframework.dto.AnimeResponse;
 import com.estudos.springframework.exceptions.BadRequestException;
 import com.estudos.springframework.exceptions.ResourceNotFoundException;
-import com.estudos.springframework.request.AnimePatchRequestBody;
-import com.estudos.springframework.request.AnimePostRequestBody;
-import com.estudos.springframework.request.AnimePutRequestBody;
-import com.estudos.springframework.request.AnimeView;
 import com.estudos.springframework.service.AnimeService;
-import com.estudos.springframework.util.DateUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,12 +15,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
-
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -30,40 +26,36 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/animes")
 @RequiredArgsConstructor
 @Log4j2
 public class AnimeController {
 
-    private final DateUtil dateUtil;
     private final AnimeService service;
 
-    @GetMapping({"/", ""})
+    @GetMapping
     @CrossOrigin(origins = "http://127.0.0.1:5500")
     @Operation(summary = "List all animes paginated", description = "Default size is 10")
-    public ResponseEntity<CollectionModel<AnimeView>> listPageable(@ParameterObject Pageable page){
-        //log.info(dateUtil.formatLocalDateTimeToSQLDate(LocalDateTime.now()));
-        Page<AnimeView> animeViews = service.listAll(page);
+    public ResponseEntity<CollectionModel<AnimeResponse>> listPageable(@ParameterObject Pageable page){
+        Page<AnimeResponse> animeViews = service.listAll(page);
         return ResponseEntity.ok(hateoasOf(animeViews));
-    }
-
-    @GetMapping("/public")
-    public ResponseEntity<String> home(@AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.ok("Animes API");
     }
 
     @GetMapping("/all")
-    public ResponseEntity<CollectionModel<AnimeView>> listAll(){
-        List<AnimeView> animeViews = service.listAll();
-        return ResponseEntity.ok(hateoasOf(animeViews));
+    public ResponseEntity<CollectionModel<AnimeResponse>> listAll(){
+        List<AnimeResponse> animeResponses = service.listAll();
+        return ResponseEntity.ok(hateoasOf(animeResponses));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnimeView> findById(@PathVariable long id){
+    public ResponseEntity<AnimeResponse> findById(@PathVariable long id){
         try{
-            AnimeView animeView = service.findById(id);
-            return ResponseEntity.ok(hateoasOf(animeView));
+            AnimeResponse animeResponse = service.findById(id);
+            return ResponseEntity.ok(hateoasOf(animeResponse));
         }
         catch (ResourceNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -71,20 +63,19 @@ public class AnimeController {
     }
 
     @GetMapping("/find")
-    public ResponseEntity<CollectionModel<AnimeView>> findAllByname(@RequestParam(required = false) String name){
-        List<AnimeView> animeViews = service.findAllByName(name);
-        return ResponseEntity.ok(hateoasOf(animeViews));
+    public ResponseEntity<CollectionModel<AnimeResponse>> findAllByname(@RequestParam(required = false) String name){
+        List<AnimeResponse> animeResponses = service.findAllByName(name);
+        return ResponseEntity.ok(hateoasOf(animeResponses));
     }
 
     @PostMapping
     @CrossOrigin(origins = "http://127.0.0.1:5500")
-    public ResponseEntity<AnimeView> save(@RequestBody @Valid AnimePostRequestBody anime){
-        AnimeView savedAnime = service.save(anime);
+    public ResponseEntity<AnimeResponse> save(@RequestBody @Valid AnimePostRequestBody anime){
+        AnimeResponse savedAnime = service.save(anime);
         return new ResponseEntity<>(hateoasWith2Links(savedAnime), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "If try to delete as USER authority"),
@@ -97,32 +88,32 @@ public class AnimeController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AnimeView> update(@PathVariable long id, @RequestBody AnimePatchRequestBody anime)
+    public ResponseEntity<AnimeResponse> update(@PathVariable long id, @RequestBody AnimePatchRequestBody anime)
                                                                             throws BadRequestException{
-        AnimeView updatedAnime = service.update(id, anime);
+        AnimeResponse updatedAnime = service.update(id, anime);
         return ResponseEntity.ok(hateoasWith2Links(updatedAnime));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnimeView> replace(@PathVariable long id, @Valid @RequestBody AnimePutRequestBody anime)
+    public ResponseEntity<AnimeResponse> replace(@PathVariable long id, @Valid @RequestBody AnimePutRequestBody anime)
                                                                                 throws BadRequestException{
-        AnimeView replacedAnime = service.replace(id, anime);
+        AnimeResponse replacedAnime = service.replace(id, anime);
         return ResponseEntity.ok(hateoasWith2Links(replacedAnime));
     }
 
-    private AnimeView hateoasOf(AnimeView animeView){
-        animeView.add(linkTo(AnimeController.class).withSelfRel());
-        return animeView;
+    private AnimeResponse hateoasOf(AnimeResponse animeResponse){
+        animeResponse.add(linkTo(AnimeController.class).withSelfRel());
+        return animeResponse;
     }
 
-    private AnimeView hateoasWith2Links(AnimeView animeView){
-        animeView.add(linkTo(
-                methodOn(AnimeController.class).findById(animeView.getId())
+    private AnimeResponse hateoasWith2Links(AnimeResponse animeResponse){
+        animeResponse.add(linkTo(
+                methodOn(AnimeController.class).findById(animeResponse.getId())
         ).withSelfRel());
-        return hateoasOf(animeView);
+        return hateoasOf(animeResponse);
     }
 
-    private CollectionModel<AnimeView> hateoasOf(Iterable<AnimeView> animeViews){
+    private CollectionModel<AnimeResponse> hateoasOf(Iterable<AnimeResponse> animeViews){
         for (var animeView: animeViews){
             animeView.add(linkTo(
                             methodOn(AnimeController.class).findById(animeView.getId())

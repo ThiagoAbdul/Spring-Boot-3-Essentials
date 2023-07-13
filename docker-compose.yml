@@ -1,8 +1,4 @@
 version: '2.4'
-x-databases-variables: &database-variables
-  SPRING_DATASOURCE_URL: jdbc:mysql://mysql_container_4:3306/dbanime?createDatabaseIfNotExist=true
-  SPRING_DATASOURCE_USERNAME: root
-  SPRING_DATASOURCE_PASSWORD: root
 
 services:
   db:
@@ -15,37 +11,21 @@ services:
     volumes:
       - outro_volume:/var/lib/mysql
     mem_limit: 512m
-#  prometheus:
-#    image: prom/prometheus:latest
-#    container_name: prometheus
-#    volumes:
-#      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
-#    command:
-#      - --config.file=/etc/prometheus/prometheus.yml
-#    ports:
-#      - "9090:9090"
-#    mem_limit: 128m
-#  grafana:
-#    image: grafana/grafana:latest
-#    container_name: grafana
-#    ports:
-#      - "3000:3000"
-#    mem_limit: 128m
-#  spring-essentials:
-#    image: registry.hub.docker.com/thiagoabdul/spring-essentials:0.0.1-SNAPSHOT
-#    container_name: spring-essentials
-#    ports:
-#      - "8080:8080"
-#    environment:
-#      <<: *database-variables
-#    mem_limit: 1024m
-#  spring-essentials3:
-#    image: registry.hub.docker.com/thiagoabdul/spring-essentials:0.0.1-SNAPSHOT
-#    container_name: spring-essentials3
-#    ports:
-#      - "8081:8080"
-#    environment:
-#      <<: *database-variables
-#    mem_limit: 1024m
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    mem_limit: 128m
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    mem_limit: 128m
 volumes:
   outro_volume:

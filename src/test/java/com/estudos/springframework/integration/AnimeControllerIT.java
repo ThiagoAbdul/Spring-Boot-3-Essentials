@@ -2,7 +2,7 @@ package com.estudos.springframework.integration;
 
 import com.estudos.springframework.domain.Anime;
 import com.estudos.springframework.repository.AnimeRepository;
-import com.estudos.springframework.request.AnimeView;
+import com.estudos.springframework.dto.AnimeResponse;
 import com.estudos.springframework.util.AnimeCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -64,11 +64,11 @@ public class AnimeControllerIT {
     @Test
     void listAllAsUserAuthorityTest(){
         final String URL = getRootUri("/all");
-        ResponseEntity<CollectionModel<AnimeView>> responseAnime = testRestTemplateUser.exchange(
+        ResponseEntity<CollectionModel<AnimeResponse>> responseAnime = testRestTemplateUser.exchange(
                 URL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<CollectionModel<AnimeView>>() {
+                new ParameterizedTypeReference<CollectionModel<AnimeResponse>>() {
                 }
         );
         Assertions.assertThat(responseAnime)
@@ -84,11 +84,11 @@ public class AnimeControllerIT {
     @Test
     void listAllAsAdminAuthorityTest(){
         final String URL = getRootUri("/all");
-        ResponseEntity<CollectionModel<AnimeView>> responseAnime = testRestTemplateAdmin.exchange(
+        ResponseEntity<CollectionModel<AnimeResponse>> responseAnime = testRestTemplateAdmin.exchange(
                 URL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<CollectionModel<AnimeView>>() {
+                new ParameterizedTypeReference<CollectionModel<AnimeResponse>>() {
                 }
         );
         Assertions.assertThat(responseAnime)

@@ -1,9 +1,9 @@
 package com.estudos.springframework.mapper;
 
 import com.estudos.springframework.domain.Anime;
-import com.estudos.springframework.request.AnimePostRequestBody;
-import com.estudos.springframework.request.AnimePutRequestBody;
-import com.estudos.springframework.request.AnimeView;
+import com.estudos.springframework.dto.AnimePostRequestBody;
+import com.estudos.springframework.dto.AnimePutRequestBody;
+import com.estudos.springframework.dto.AnimeResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
@@ -16,7 +16,7 @@ public interface AnimeMapper {
     public static final AnimeMapper INSTANCE = Mappers.getMapper(AnimeMapper.class);
     Anime toAnime(AnimePostRequestBody anime);
     Anime toAnime(AnimePutRequestBody anime);
-    AnimeView toAnimeView(Anime anime);
+    AnimeResponse toAnimeView(Anime anime);
     AnimePostRequestBody toAnimePostRequestBody(Anime anime);
     AnimePutRequestBody toAnimePutRequestBody(Anime anime);
 

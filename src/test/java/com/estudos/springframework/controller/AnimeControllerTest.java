@@ -1,7 +1,7 @@
 package com.estudos.springframework.controller;
 
 import com.estudos.springframework.exceptions.ResourceNotFoundException;
-import com.estudos.springframework.request.AnimeView;
+import com.estudos.springframework.dto.AnimeResponse;
 import com.estudos.springframework.service.AnimeService;
 import com.estudos.springframework.util.AnimeViewCreator;
 import org.assertj.core.api.Assertions;
@@ -33,7 +33,7 @@ class AnimeControllerTest {
 
     @BeforeEach
     void setup(){
-        PageImpl<AnimeView> animePage = new PageImpl<>(AnimeViewCreator.createListOfAnimeView());
+        PageImpl<AnimeResponse> animePage = new PageImpl<>(AnimeViewCreator.createListOfAnimeView());
         BDDMockito.when(animeServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(animePage);
         BDDMockito.when(animeServiceMock.listAll())
@@ -47,17 +47,17 @@ class AnimeControllerTest {
     }
 
     @Test
-    @DisplayName("Tests if the method listAllPageable passing an pageable as argument return a Page of AnimeView")
+    @DisplayName("Tests if the method listAllPageable passing an pageable as argument return a Page of AnimeResponse")
     void listPageableTest(){
-        CollectionModel<AnimeView> expectedAnimeViews = CollectionModel.of(
+        CollectionModel<AnimeResponse> expectedAnimeViews = CollectionModel.of(
                 AnimeViewCreator.createPageOfAnimeView());
-        CollectionModel<AnimeView> resultAnimeViews = animeController.listPageable(null).getBody();
+        CollectionModel<AnimeResponse> resultAnimeViews = animeController.listPageable(null).getBody();
         assert resultAnimeViews != null;
         List<String> expectedAnimeNames = expectedAnimeViews.getContent()
-                .stream().map(AnimeView::getName)
+                .stream().map(AnimeResponse::getName)
                 .collect(Collectors.toList());
         List<String> resultdAnimeNames = resultAnimeViews.getContent()
-                .stream().map(AnimeView::getName)
+                .stream().map(AnimeResponse::getName)
                 .collect(Collectors.toList());
 
                 Assertions.assertThat(resultdAnimeNames).isEqualTo(expectedAnimeNames);
@@ -65,11 +65,11 @@ class AnimeControllerTest {
     }
 
     @Test
-    @DisplayName("Test if the method listAll return a list of AnimeView")
+    @DisplayName("Test if the method listAll return a list of AnimeResponse")
     void listAllNonPageableTest(){
-        CollectionModel<AnimeView> expectedListOfAnime = CollectionModel.of(
+        CollectionModel<AnimeResponse> expectedListOfAnime = CollectionModel.of(
                 AnimeViewCreator.createListOfAnimeView());
-        CollectionModel<AnimeView> resultListOfAnime = animeController.listAll().getBody();
+        CollectionModel<AnimeResponse> resultListOfAnime = animeController.listAll().getBody();
         assert resultListOfAnime != null;
         Assertions.assertThat(new ArrayList<>(resultListOfAnime.getContent()))
                 .isNotNull()
@@ -80,11 +80,11 @@ class AnimeControllerTest {
     @Test
     @DisplayName("Test the method findById when successful")
     void findByIdTest(){
-        AnimeView expectedAnimeView = AnimeViewCreator.createAnimeView();
-        AnimeView resultAnimeView = animeController.findById(ArgumentMatchers.anyLong()).getBody();
-        Assertions.assertThat(resultAnimeView)
+        AnimeResponse expectedAnimeResponse = AnimeViewCreator.createAnimeView();
+        AnimeResponse resultAnimeResponse = animeController.findById(ArgumentMatchers.anyLong()).getBody();
+        Assertions.assertThat(resultAnimeResponse)
                 .isNotNull()
-                .isEqualTo(expectedAnimeView);
+                .isEqualTo(expectedAnimeResponse);
     }
 
     @Test

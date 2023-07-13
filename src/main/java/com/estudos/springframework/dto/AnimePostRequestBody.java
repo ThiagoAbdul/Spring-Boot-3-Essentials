@@ -1,4 +1,4 @@
-package com.estudos.springframework.request;
+package com.estudos.springframework.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

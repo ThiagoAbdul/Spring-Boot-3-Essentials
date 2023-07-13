@@ -30,3 +30,7 @@ management:
           "*"
 info:
   app: spring-anime
+
+security:
+  token:
+    secret: ${SECRET_KEY}
